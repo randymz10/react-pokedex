@@ -1,0 +1,85 @@
+@use 'bulma/bulma';
+
+.image-h {
+    max-height: 12rem !important;
+    object-fit: contain;
+}
+
+.is-fire {
+    background-color: #ef4444;
+}
+
+.is-water {
+    background-color: #3b82f6;
+}
+
+.is-electric {
+    background-color: #fbbf24;
+}
+
+.is-grass {
+    background-color: #10b981;
+    color: black;
+}
+
+.is-ice {
+    background-color: #bfdbfe;
+}
+
+.is-fighting {
+    background-color: #b91c1c;
+}
+
+.is-poison {
+    background-color: #a855f7;
+}
+
+.is-ground {
+    background-color: #d97706;
+}
+
+.is-flying {
+    background-color: #818cf8;
+}
+
+.is-psychic {
+    background-color: #ec4899;
+}
+
+.is-bug {
+    background-color: #84cc16;
+}
+
+.is-rock {
+    background-color: #854d0e;
+}
+
+.is-ghost {
+    background-color: #6b21a8;
+}
+
+.is-dragon {
+    background-color: #4338ca;
+}
+
+.is-dark {
+    background-color: #1f2937;
+}
+
+.is-steel {
+    background-color: #6b7280;
+}
+
+.is-fairy {
+    background-color: #f9a8d4;
+}
+
+.card {
+    transition: 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card.is-hovered {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
