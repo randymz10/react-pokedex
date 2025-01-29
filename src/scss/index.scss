@@ -83,3 +83,19 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
+
+.dropdown-menu {
+    min-width: 100% !important;
+}
+
+.dropdown-content {
+    max-height: 300px;
+    overflow-y: auto;
+    // width: 50px !important;
+    // padding-inline-end: 0 !important;
+}
+
+// .dropdown-item {
+//     padding-inline-start: 0 !important;
+//     padding-inline-end: 0 !important;
+// }

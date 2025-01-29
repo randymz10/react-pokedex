@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import PokemonList from "./components/PokemonList";
+import Pagination from "./components/Pagination";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
 function App() {
   const [pokemonList, setPokemonList] = useState([]);
-  const [currentUrl, setCurrentUrl] = useState(API_URL);
-  const [prevUrl, setPrevUrl] = useState("");
-  const [nextUrl, setNextUrl] = useState("");
+  const [paginationData, setPaginationdata] = useState({
+    currentUrl: API_URL,
+    prevUrl: null,
+    nextUrl: null,
+    numOfPokemons: 0,
+    currentPage: 1,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [theme, setTheme] = useState(getTheme());
@@ -55,23 +60,44 @@ function App() {
             };
             return pokemonInfo;
           });
-          setPrevUrl(data.previous === null ? API_URL : data.previous);
-          setNextUrl(data.next);
+          setPaginationdata((prevData) => ({
+            ...prevData,
+            currentUrl: url,
+            prevUrl: data.previous,
+            nextUrl: data.next,
+            numOfPokemons: data.count,
+          }));
           setPokemonList(await Promise.all(pokemonInfoList));
           setError(null);
         })
         .catch((error) => setError(error))
         .finally(() => setIsLoading(false));
     }
-    fetchPokemon(currentUrl);
-  }, [currentUrl]);
+    fetchPokemon(paginationData.currentUrl);
+  }, [paginationData.currentUrl]);
 
-  function handlePrev() {
-    setCurrentUrl(prevUrl);
+  function handlePrev(page) {
+    setPaginationdata((prevData) => ({
+      ...prevData,
+      currentUrl: paginationData.prevUrl,
+      currentPage: page,
+    }));
   }
 
-  function handleNext() {
-    setCurrentUrl(nextUrl);
+  function handleNext(page) {
+    setPaginationdata((prevData) => ({
+      ...prevData,
+      currentUrl: paginationData.nextUrl,
+      currentPage: page,
+    }));
+  }
+
+  function handlePage(page) {
+    setPaginationdata((prevData) => ({
+      ...prevData,
+      currentUrl: `${API_URL}?offset=${(page - 1) * 20}`,
+      currentPage: page,
+    }));
   }
 
   return (
@@ -83,71 +109,12 @@ function App() {
         <>
           <PokemonList pokemonList={pokemonList} />
           {/* <div className="container is-widescreen"></div> */}
-          <nav
-            className="pagination is-centered"
-            role="navigation"
-            aria-label="pagination"
-          >
-            <button className="pagination-previous" onClick={handlePrev}>
-              Prev
-            </button>
-            <ul className="pagination-list">
-              <li>
-                <a
-                  href="#"
-                  className="pagination-link"
-                  aria-label="Goto page 1"
-                >
-                  1
-                </a>
-              </li>
-              <li>
-                <span className="pagination-ellipsis">&hellip;</span>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="pagination-link"
-                  aria-label="Goto page 45"
-                >
-                  45
-                </a>
-              </li>
-              <li>
-                <a
-                  className="pagination-link is-current"
-                  aria-label="Page 46"
-                  aria-current="page"
-                >
-                  46
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="pagination-link"
-                  aria-label="Goto page 47"
-                >
-                  47
-                </a>
-              </li>
-              <li>
-                <span className="pagination-ellipsis">&hellip;</span>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="pagination-link"
-                  aria-label="Goto page 86"
-                >
-                  86
-                </a>
-              </li>
-            </ul>
-            <button className="pagination-next" onClick={handleNext}>
-              Next
-            </button>
-          </nav>
+          <Pagination
+            paginationData={paginationData}
+            handlePrev={handlePrev}
+            handleNext={handleNext}
+            handlePage={handlePage}
+          />
         </>
       )}
     </>
