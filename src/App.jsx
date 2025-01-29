@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import PokemonList from "./components/PokemonList";
 import Pagination from "./components/Pagination";
+import Loader from "./components/Loader";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
@@ -103,7 +104,8 @@ function App() {
   return (
     <>
       <Header theme={theme} onToggleTheme={handleTheme} />
-      {isLoading && <div>Loading...</div>}
+      <Loader />
+      {isLoading && <Loader />}
       {!isLoading && error && <div>Error to fetching data...</div>}
       {!isLoading && !error && (
         <>

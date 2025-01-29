@@ -28,6 +28,11 @@ function formatPokemonId(id) {
 
 function PokemonCard({ pokemon }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  function handleOnLoad() {
+    setImageLoaded(true);
+  }
 
   return (
     <div
@@ -35,9 +40,14 @@ function PokemonCard({ pokemon }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="card-image">
-        <figure className="image">
-          <img className="image-h" src={pokemon.imageUrl} loading="lazy" />
+      <div className="card-image ">
+        <figure className={`image ${imageLoaded ? "" : "is-skeleton"}`}>
+          <img
+            className="image-h"
+            src={pokemon.imageUrl}
+            loading="lazy"
+            onLoad={handleOnLoad}
+          />
         </figure>
       </div>
       <div className="card-content">
