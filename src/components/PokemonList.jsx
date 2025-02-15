@@ -1,9 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 import SearchBar from "./SearchBar";
 import PokemonCard from "./PokemonCard";
+import { usePokemonStore } from "../store/pokemonStore";
 
-function PokemonList({ pokemonList }) {
+function PokemonList() {
+  const pokemonList = usePokemonStore((state) => state.pokemons);
+
   return (
     <main className="container">
       <SearchBar />
@@ -17,22 +19,5 @@ function PokemonList({ pokemonList }) {
     </main>
   );
 }
-
-PokemonList.propTypes = {
-  pokemonList: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-      types: PropTypes.arrayOf(
-        PropTypes.shape({
-          type: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-          }).isRequired,
-        }).isRequired
-      ).isRequired,
-    }).isRequired
-  ).isRequired,
-};
 
 export default PokemonList;

@@ -1,15 +1,39 @@
 import React, { useState } from "react";
 import { FaAngleUp } from "react-icons/fa6";
 import PropTypes from "prop-types";
+import { usePokemonStore } from "../store/pokemonStore";
 
-function Pagination({ handlePrev, handleNext, paginationData, handlePage }) {
-  const { numOfPokemons, currentPage, prevUrl, nextUrl } = paginationData;
+function Pagination() {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
+  const { numOfPokemons, currentPage, prevUrl, nextUrl } = usePokemonStore(
+    (state) => state.paginationData
+  );
+  const updatePokemons = usePokemonStore((state) => state.updatePokemons);
 
   const numOfPages = Math.ceil(numOfPokemons / 20);
 
   function handleDropdown() {
     setIsDropdownActive((prev) => !prev);
+  }
+
+  function handlePrev(page) {
+    updatePokemons(prevUrl)
+  }
+
+  function handleNext(page) {
+    setPaginationdata((prevData) => ({
+      ...prevData,
+      currentUrl: nextUrl,
+      currentPage: page,
+    }));
+  }
+
+  function handlePage(page) {
+    setPaginationdata((prevData) => ({
+      ...prevData,
+      currentUrl: `${apiUrl}?offset=${(page - 1) * 20}`,
+      currentPage: page,
+    }));
   }
 
   return (

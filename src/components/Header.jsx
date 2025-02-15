@@ -1,13 +1,32 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { usePokemonStore } from "../store/pokemonStore";
+
 import { FaMoon } from "react-icons/fa6";
 import { FaSun } from "react-icons/fa6";
 
-function Header({ theme, onToggleTheme }) {
+function Header() {
+  const theme = usePokemonStore((state) => state.theme);
+  const updateTheme = usePokemonStore((state) => state.updateTheme);
+
+  useEffect(
+    function () {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    },
+    [theme]
+  );
+
+  function handleTheme() {
+    if (theme === "light") {
+      updateTheme("dark");
+      return;
+    }
+    updateTheme("light");
+  }
   return (
     <header className="">
       <div className="is-flex is-justify-content-flex-end">
-        <button className="button" onClick={onToggleTheme}>
+        <button className="button" onClick={handleTheme}>
           <span className="icon">
             {theme === "light" ? <FaMoon /> : <FaSun />}
           </span>
@@ -22,9 +41,5 @@ function Header({ theme, onToggleTheme }) {
     </header>
   );
 }
-Header.propTypes = {
-  theme: PropTypes.string.isRequired,
-  onToggleTheme: PropTypes.func.isRequired,
-};
 
 export default Header;
