@@ -18,7 +18,7 @@ export const usePokemonStore = create((set) => ({
   theme: getTheme,
 
   updateTheme: (newTheme) => set({ theme: newTheme }),
-  updatePokemons: (url) => {
+  updatePokemons: (url, page = 1) => {
     set({ isLoading: true });
     fetch(url)
       .then((res) => res.json())
@@ -41,6 +41,7 @@ export const usePokemonStore = create((set) => ({
             prevUrl: data.previous,
             nextUrl: data.next,
             numOfPokemons: data.count,
+            currentPage: page,
           },
         }));
         set({ pokemons: await Promise.all(pokemonInfoList) });

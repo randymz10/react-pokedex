@@ -27,12 +27,7 @@ function App() {
         <>
           <PokemonList />
           {/* <div className="container is-widescreen"></div> */}
-          {/* <Pagination
-            paginationData={paginationData}
-            handlePrev={handlePrev}
-            handleNext={handleNext}
-            handlePage={handlePage}
-          /> */}
+          <Pagination />
         </>
       )}
     </>

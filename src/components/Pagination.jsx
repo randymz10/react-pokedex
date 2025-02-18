@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { FaAngleUp } from "react-icons/fa6";
-import PropTypes from "prop-types";
 import { usePokemonStore } from "../store/pokemonStore";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function Pagination() {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
@@ -17,23 +18,16 @@ function Pagination() {
   }
 
   function handlePrev(page) {
-    updatePokemons(prevUrl)
+    updatePokemons(prevUrl, page);
   }
 
   function handleNext(page) {
-    setPaginationdata((prevData) => ({
-      ...prevData,
-      currentUrl: nextUrl,
-      currentPage: page,
-    }));
+    updatePokemons(nextUrl, page);
   }
 
   function handlePage(page) {
-    setPaginationdata((prevData) => ({
-      ...prevData,
-      currentUrl: `${apiUrl}?offset=${(page - 1) * 20}`,
-      currentPage: page,
-    }));
+    const url = `${apiUrl}?offset=${(page - 1) * 20}`;
+    updatePokemons(url, page);
   }
 
   return (
@@ -71,7 +65,7 @@ function Pagination() {
                   aria-controls="dropdown-menu"
                   onClick={handleDropdown}
                 >
-                  <span>Select Page</span>
+                  <span>Page: {currentPage} of / {numOfPages}</span>
                   <span className="icon is-small">
                     <FaAngleUp />
                   </span>
@@ -104,17 +98,5 @@ function Pagination() {
     </div>
   );
 }
-Pagination.propTypes = {
-  handlePrev: PropTypes.func.isRequired,
-  handleNext: PropTypes.func.isRequired,
-  handlePage: PropTypes.func.isRequired,
-  paginationData: PropTypes.shape({
-    numOfPokemons: PropTypes.number.isRequired,
-    currentUrl: PropTypes.string.isRequired,
-    prevUrl: PropTypes.string,
-    nextUrl: PropTypes.string,
-    currentPage: PropTypes.number.isRequired,
-  }).isRequired,
-};
 
 export default Pagination;
