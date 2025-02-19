@@ -97,6 +97,7 @@ function SearchBar() {
                   onChange={handleChange}
                 >
                   <option value="">Select type</option>
+                  {/* {Options} */}
                   {options?.map((option, i) => (
                     <option key={i} value={option}>
                       {option}
@@ -107,7 +108,19 @@ function SearchBar() {
             </div>
             {/* Submit button */}
             <div className="control">
-              <button className="button is-primary">Search</button>
+              <button type="button" className="button is-primary">
+                Search
+              </button>
+            </div>
+            {/* Reset button */}
+            <div className="control">
+              <button
+                type="button"
+                className="button is-danger"
+                onClick={handleResetValues}
+              >
+                Reset
+              </button>
             </div>
           </div>
         </form>
