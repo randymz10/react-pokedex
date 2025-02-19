@@ -18,12 +18,13 @@ export const usePokemonStore = create((set) => ({
   theme: getTheme,
 
   updateTheme: (newTheme) => set({ theme: newTheme }),
-  updatePokemons: (url, page = 1) => {
+  updatePokemons: (url, page = 1, type = "") => {
     set({ isLoading: true });
     fetch(url)
       .then((res) => res.json())
       .then(async (data) => {
         let pokemonInfoList;
+
         if (data.results) {
           pokemonInfoList = data.results.map(async (pokemonData) => {
             const res = await fetch(pokemonData.url);
@@ -62,6 +63,12 @@ export const usePokemonStore = create((set) => ({
             currentPage: page ? page : 1,
           },
         }));
+
+        if (type) {
+          console.log(pokemonInfoList);
+          set({ error: null });
+          return;
+        }
         set({ pokemons: await Promise.all(pokemonInfoList) });
         set({ error: null });
       })
