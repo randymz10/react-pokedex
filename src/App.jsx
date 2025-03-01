@@ -4,9 +4,10 @@ import PokemonList from "./components/PokemonList";
 import Pagination from "./components/Pagination";
 import Loader from "./components/Loader";
 import { usePokemonStore } from "./store/pokemonStore";
+import SearchBar from "./components/SearchBar";
 
 // @ts-ignore
-const apiUrl = import.meta.env.VITE_API_URL;  
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function App() {
   const isLoading = usePokemonStore((state) => state.isLoading);
@@ -22,7 +23,12 @@ function App() {
     <>
       <Header />
       {isLoading && <Loader />}
-      {!isLoading && error && <div>Error to fetching data...</div>}
+      {!isLoading && error && (
+        <>
+          <SearchBar />
+          <div>Error to fetching data...</div>
+        </>
+      )}
       {!isLoading && !error && (
         <>
           <PokemonList />

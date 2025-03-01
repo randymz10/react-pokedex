@@ -1,30 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { usePokemonStore } from "../store/pokemonStore";
 
-const apiUrlTypes = "https://pokeapi.co/api/v2/type/";
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function SearchBar() {
   const [formData, setFormData] = useState({ search: "", type: "" });
-  const [options, setOptions] = useState([]);
   const [validationMessage, setValidationMesage] = useState("");
 
   const updatePokemons = usePokemonStore((state) => state.updatePokemons);
+  const updatePokemon = usePokemonStore((state) => state.updatePokemon);
+  const pokemonDetails = usePokemonStore((state) => state.pokemon);
 
-  useEffect(() => {
-    fetch(apiUrlTypes)
-      .then((res) => res.json())
-      .then((data) => {
-        const pokemonTypes = data.results;
-        const typesName = pokemonTypes.map((type) => type.name);
-        setOptions(typesName);
-      });
-  }, []);
-
-  function handleResetValues() {
+  function resetValues() {
     setValidationMesage("");
     setFormData((prevState) => ({ ...prevState, search: "", type: "" }));
+  }
+
+  function handleResetValues() {
+    resetValues();
+    updatePokemons(apiUrl);
   }
 
   function handleChange(e) {
@@ -34,41 +29,25 @@ function SearchBar() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const type = formData.type;
     const searchQuery = formData.search;
-
-    // Validation message when the fields are empty
-    if (!searchQuery.trim() && !type.trim()) {
+    const searchUrl = `${apiUrl}/${searchQuery.toLowerCase()}`;
+    console.log(searchUrl);
+    // Validation message when the field is empty
+    if (!searchQuery.trim()) {
       setValidationMesage(
-        "Please, fill the field with the name or id, or select a type."
+        "Please, fill the field with the name or id of the pokemon to continue"
       );
       return;
     }
 
-    // When only exists the searchQuery
-    if (searchQuery.trim() && !type.trim()) {
-      const newUrl = `${apiUrl}${searchQuery}`;
-      updatePokemons(newUrl);
-      handleResetValues();
-      return;
-    }
-
-    // When only exists the type
-    if (!searchQuery.trim() && type.trim()) {
-      const newUrl = `${apiUrlTypes}${type}`;
-      updatePokemons(newUrl);
-      console.log("executed");
-      handleResetValues();
-      return;
-    }
-
-    // updatePokemons(newUrl);
+    updatePokemon(searchUrl);
+    console.log(pokemonDetails);
   }
 
   return (
     <section className="columns is-centered">
       <div className="column is-8">
-        {/* Formulario */}
+        {/* Form */}
         <form className="m-5" onSubmit={handleSubmit}>
           <label className="label">Search</label>
           <div className="field is-grouped">
@@ -88,29 +67,9 @@ function SearchBar() {
                 <p className="help is-danger">{validationMessage}</p>
               )}
             </div>
-            {/* Option selector */}
-            <div className="control">
-              <div className="select">
-                <select
-                  name="type"
-                  value={formData.type}
-                  onChange={handleChange}
-                >
-                  <option value="">Select type</option>
-                  {/* {Options} */}
-                  {options?.map((option, i) => (
-                    <option key={i} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
             {/* Submit button */}
             <div className="control">
-              <button type="button" className="button is-primary">
-                Search
-              </button>
+              <button className="button is-primary">Search</button>
             </div>
             {/* Reset button */}
             <div className="control">
