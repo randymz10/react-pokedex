@@ -30,7 +30,8 @@ export const usePokemonStore = create((set) => ({
     }
 
     try {
-      set({ pokemonDetails: getPokemonDetails(url) });
+      const pokemonDetails = await getPokemonDetails(url);
+      set({ pokemonDetails: pokemonDetails });
       set({ error: null });
     } catch (error) {
       set({ error: error });
