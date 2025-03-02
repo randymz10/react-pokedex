@@ -1,42 +1,21 @@
-import React, { useEffect } from "react";
-import Header from "./components/Header";
-import PokemonList from "./components/PokemonList";
-import Pagination from "./components/Pagination";
-import Loader from "./components/Loader";
-import { usePokemonStore } from "./store/pokemonStore";
-import SearchBar from "./components/SearchBar";
-
-// @ts-ignore
-const apiUrl = import.meta.env.VITE_API_URL;
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router";
+import Layout from "./layout/Layout";
+import Home from "./pages/Home";
+import PokemonDetails from "./pages/PokemonDetails";
+import Error from "./pages/Error";
 
 function App() {
-  const isLoading = usePokemonStore((state) => state.isLoading);
-  const error = usePokemonStore((state) => state.error);
-
-  const updatePokemons = usePokemonStore((state) => state.updatePokemons);
-
-  useEffect(() => {
-    updatePokemons(apiUrl);
-  }, []);
-
   return (
-    <>
-      <Header />
-      {isLoading && <Loader />}
-      {!isLoading && error && (
-        <>
-          <SearchBar />
-          <div>Error to fetching data...</div>
-        </>
-      )}
-      {!isLoading && !error && (
-        <>
-          <PokemonList />
-          {/* <div className="container is-widescreen"></div> */}
-          <Pagination />
-        </>
-      )}
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/pokemon/:name" element={<PokemonDetails />} />
+          <Route path="*" element={<Error />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

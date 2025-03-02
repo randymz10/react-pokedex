@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import { usePokemonStore } from "../store/pokemonStore";
+import { useNavigate } from "react-router";
 
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function SearchBar() {
+  // Local state
   const [formData, setFormData] = useState({ search: "", type: "" });
   const [validationMessage, setValidationMesage] = useState("");
-
+  // Store state
   const updatePokemons = usePokemonStore((state) => state.updatePokemons);
   const updatePokemon = usePokemonStore((state) => state.updatePokemon);
-  const pokemonDetails = usePokemonStore((state) => state.pokemon);
+  // Router
+  const navigate = useNavigate();
 
-  function resetValues() {
+  //Handlers functions
+  function resetLocalState() {
     setValidationMesage("");
     setFormData((prevState) => ({ ...prevState, search: "", type: "" }));
   }
 
   function handleResetValues() {
-    resetValues();
+    resetLocalState();
     updatePokemons(apiUrl);
+    updatePokemon(null);
+    navigate("/");
   }
 
   function handleChange(e) {
@@ -30,8 +36,7 @@ function SearchBar() {
   function handleSubmit(e) {
     e.preventDefault();
     const searchQuery = formData.search;
-    const searchUrl = `${apiUrl}/${searchQuery.toLowerCase()}`;
-    console.log(searchUrl);
+
     // Validation message when the field is empty
     if (!searchQuery.trim()) {
       setValidationMesage(
@@ -40,8 +45,8 @@ function SearchBar() {
       return;
     }
 
-    updatePokemon(searchUrl);
-    console.log(pokemonDetails);
+    resetLocalState();
+    navigate(`/pokemon/${searchQuery.toLowerCase()}`);
   }
 
   return (

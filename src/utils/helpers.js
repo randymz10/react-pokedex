@@ -6,3 +6,8 @@ export const getTheme = () => {
   }
   return localStorage.getItem("theme");
 };
+
+export function formatPokemonId(id) {
+  if (!id) return;
+  return `#${id.toString().padStart(3, "0")}`;
+}

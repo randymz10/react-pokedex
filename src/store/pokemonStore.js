@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { getTheme } from "../utils/helpers";
+import { getPokemonDetails } from "../services/apiPokemon";
 
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -21,19 +22,19 @@ export const usePokemonStore = create((set) => ({
   updateTheme: (newTheme) => set({ theme: newTheme }),
   updatePokemon: async (url) => {
     set({ isLoading: true });
+
+    if (!url) {
+      set({ pokemonDetails: {} });
+      set({ isLoading: false });
+      return;
+    }
+
     try {
-      const res = await fetch(url);
-      const data = await res.json();
-      const pokemonInfo = {
-        id: data.id,
-        name: data.name,
-        imageUrl: data.sprites.other["official-artwork"].front_default,
-        types: data.types,
-      };
-      set({ pokemonDetails: pokemonInfo });
+      set({ pokemonDetails: getPokemonDetails(url) });
       set({ error: null });
     } catch (error) {
       set({ error: error });
+      set({ pokemonDetails: {} });
     } finally {
       set({ isLoading: false });
     }
