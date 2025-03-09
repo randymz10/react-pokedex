@@ -22,9 +22,7 @@ function PokemonImage({ imageUrl }) {
 }
 
 PokemonImage.propTypes = {
-  pokemon: PropTypes.shape({
-    imageUrl: PropTypes.string.isRequired,
-  }).isRequired,
+  imageUrl: PropTypes.string.isRequired,
 };
 
 export default PokemonImage;

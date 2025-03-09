@@ -23,7 +23,7 @@ function PokemonCard({ pokemon }) {
       onClick={handleClick}
     >
       <div className="card-image ">
-        <PokemonImage imageUrl={pokemon.imageUrl} />
+        <PokemonImage imageUrl={pokemon.images[0].imageUrl} />
       </div>
       <div className="card-content">
         <p className="subtitle is-6">{formatPokemonId(pokemon.id)}</p>
@@ -42,7 +42,11 @@ PokemonCard.propTypes = {
   pokemon: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
+    images: PropTypes.arrayOf(
+      PropTypes.shape({
+        imageUrl: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     types: PropTypes.arrayOf(
       PropTypes.shape({
         type: PropTypes.shape({

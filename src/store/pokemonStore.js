@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { getTheme } from "../utils/helpers";
-import { getPokemonDetails } from "../services/apiPokemon";
+import { getPokemonDetails, getPokemonList } from "../services/apiPokemon";
 
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -40,38 +40,26 @@ export const usePokemonStore = create((set) => ({
       set({ isLoading: false });
     }
   },
-  updatePokemons: (url, page = 1) => {
-    set({ isLoading: true });
-    fetch(url)
-      .then((res) => res.json())
-      .then(async (data) => {
-        const pokemonInfoList = data.results.map(async (pokemonData) => {
-          const res = await fetch(pokemonData.url);
-          const data = await res.json();
-          const pokemonInfo = {
-            id: data.id,
-            name: data.name,
-            imageUrl: data.sprites.other["official-artwork"].front_default,
-            types: data.types,
-          };
-          return pokemonInfo;
-        });
-
-        set((prevState) => ({
-          paginationData: {
-            ...prevState.paginationData,
-            currentUrl: url,
-            prevUrl: data.previous ? data.previous : null,
-            nextUrl: data.next ? data.next : null,
-            numOfPokemons: data.count,
-            currentPage: page ? page : 1,
-          },
-        }));
-
-        set({ pokemons: await Promise.all(pokemonInfoList) });
-        set({ error: null });
-      })
-      .catch((error) => set({ error: error }))
-      .finally(() => set({ isLoading: false }));
+  updatePokemons: async (url, page = 1) => {
+    try {
+      set({ isLoading: true });
+      const { pokemonInfoList, paginationData } = await getPokemonList(url);
+      set({ pokemons: await Promise.all(pokemonInfoList) });
+      set((prevState) => ({
+        paginationData: {
+          ...prevState.paginationData,
+          currentUrl: url,
+          prevUrl: paginationData.prevUrl ? paginationData.prevUrl : null,
+          nextUrl: paginationData.nextUrl ? paginationData.nextUrl : null,
+          numOfPokemons: paginationData.numOfPokemons,
+          currentPage: page ? page : 1,
+        },
+      }));
+      set({ error: null });
+    } catch (error) {
+      set({ error: error });
+    } finally {
+      set({ isLoading: false });
+    }
   },
 }));
