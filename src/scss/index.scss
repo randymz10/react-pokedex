@@ -1,7 +1,8 @@
 @use 'bulma/bulma';
+@use 'embla';
 
 .image-h {
-    max-height: 12rem !important;
+    height: 12rem !important;
     object-fit: contain;
 }
 

@@ -7,6 +7,7 @@ import { usePokemonStore } from "../store/pokemonStore";
 import PokemonImage from "../components/PokemonImage";
 import TypeTag from "../components/TypeTag";
 import Loader from "../components/Loader";
+import EmblaCarousel from "../components/EmblaCarousel";
 
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -29,11 +30,19 @@ function PokemonDetails() {
   if (isLoading) return <Loader />;
   if (error) navigate("/error");
 
+  const OPTIONS = {};
+  const SLIDES = pokemonDetails.images?.map((imgObj, index) => {
+    return <PokemonImage key={index} imageUrl={imgObj.imageUrl} />;
+  });
+
   return (
-    <>
+    <section className="container">
       <div className="columns">
         <div className="column">
-          <PokemonImage imageUrl={pokemonDetails.imageUrl} />
+          {/* Carousel */}
+          <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+
+          {/* <PokemonImage imageUrl={pokemonDetails.imageUrl} /> */}
           <div className="tags is-centered">
             {pokemonDetails.types?.map((pokemonType) => (
               <TypeTag
@@ -51,13 +60,12 @@ function PokemonDetails() {
               {formatPokemonId(pokemonDetails.id)}
             </span>
           </h2>
-          
         </div>
       </div>
       <Link to="/" className="button is-link mt-3">
         Back to Home
       </Link>
-    </>
+    </section>
   );
 }
 
