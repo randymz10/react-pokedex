@@ -39,27 +39,44 @@ function PokemonDetails() {
     <section className="container">
       <div className="columns">
         <div className="column">
-          {/* Carousel */}
-          <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+          <div className="card mx-6 pb-4">
+            {/* Carousel */}
+            <EmblaCarousel slides={SLIDES} options={OPTIONS} />
 
-          {/* <PokemonImage imageUrl={pokemonDetails.imageUrl} /> */}
-          <div className="tags is-centered">
-            {pokemonDetails.types?.map((pokemonType) => (
-              <TypeTag
-                key={pokemonType.type.name}
-                typeName={pokemonType.type.name}
-              />
-            ))}
+            {/* <PokemonImage imageUrl={pokemonDetails.imageUrl} /> */}
           </div>
         </div>
 
-        <div className="column has-text-centered">
-          <h2 className="title is-2 is-capitalized">
-            {pokemonDetails.name}{" "}
-            <span className="subtitle is-5">
-              {formatPokemonId(pokemonDetails.id)}
-            </span>
-          </h2>
+        <div className="column">
+          <div className="card px-6 py-4 mx-6">
+            <div className="card-header is-flex is-justify-content-center">
+              <h2 className="title is-2 is-capitalized">
+                {pokemonDetails.name}{" "}
+                <span className="subtitle is-5">
+                  {formatPokemonId(pokemonDetails.id)}
+                </span>
+              </h2>
+            </div>
+            <div className="card-content">
+              <div className="is-flex is-justify-content-space-between">
+                <p>
+                  <strong>Height:</strong> {pokemonDetails.height} decimetres
+                </p>
+                <p>
+                  <strong>Weight:</strong> {pokemonDetails.weight} hectograms
+                </p>
+              </div>
+              <p className="tags">
+              <span><strong>Types:</strong></span>
+                {pokemonDetails.types?.map((pokemonType) => (
+                  <TypeTag
+                    key={pokemonType.type.name}
+                    typeName={pokemonType.type.name}
+                  />
+                ))}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <Link to="/" className="button is-link mt-3">
