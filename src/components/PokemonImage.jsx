@@ -10,7 +10,7 @@ function PokemonImage({ imageUrl }) {
   }
 
   return (
-    <figure className={`image ${imageLoaded ? "" : "is-skeleton"}`}>
+    <figure className={`image bg-pokeball${imageLoaded ? "" : "is-skeleton"}`}>
       <img
         className="image-h"
         src={imageUrl}

@@ -1,6 +1,13 @@
 @use 'bulma/bulma';
 @use 'embla';
 
+.bg-pokeball {
+    background-image: url('/pokeball-bg.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .image-h {
     height: 12rem !important;
     object-fit: contain;

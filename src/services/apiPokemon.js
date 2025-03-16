@@ -10,10 +10,7 @@ export async function getPokemonDetails(url) {
     id: data.id,
     name: data.name,
     abilities: data.abilities.map((ability) => {
-      return {
-        name: ability.ability.name,
-        is_hidden: ability.is_hidden,
-      };
+      return ability.ability.name;
     }),
     stats: data.stats.map((statItem) => {
       return {
