@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaAngleUp } from "react-icons/fa6";
 import { usePokemonStore } from "../store/pokemonStore";
 
+//@ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function Pagination() {
@@ -28,8 +29,7 @@ function Pagination() {
   }
 
   function handlePage(page) {
-    console.log(page);
-    const url = `${apiUrl}?offset=${(page - 1) * 20}`;
+    const url = `${apiUrl}pokemon?offset=${(page - 1) * 20}`;
     updatePokemons(url, page);
   }
 

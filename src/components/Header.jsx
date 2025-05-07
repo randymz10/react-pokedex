@@ -3,6 +3,7 @@ import { usePokemonStore } from "../store/pokemonStore";
 
 import { FaMoon } from "react-icons/fa6";
 import { FaSun } from "react-icons/fa6";
+import { Link } from "react-router";
 
 function Header() {
   const theme = usePokemonStore((state) => state.theme);
@@ -33,7 +34,9 @@ function Header() {
         </button>
       </div>
       <div className="has-text-centered mt-6 mb-3">
-        <h1 className="title is-1 is-uppercase ">Pokedéx</h1>
+        <h1 className="title is-1 is-uppercase ">
+          <Link to='/'>Pokedéx</Link>
+        </h1>
         <p className="subtitle is-6">
           Your Ultimate Pokémon Guide: Stats, Evolutions, and More!
         </p>

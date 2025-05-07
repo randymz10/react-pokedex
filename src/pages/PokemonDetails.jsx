@@ -23,11 +23,22 @@ function PokemonDetails() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const pokemonIdentifier = location.pathname.split("/")[2];
+  const pokemonType = location.pathname.split("/")[3];
+  const searchUrl = `${apiUrl}pokemon/${pokemonIdentifier}`;
+
   useEffect(() => {
-    const pokemonIdentifier = location.pathname.split("/")[2];
-    const searchUrl = `${apiUrl}${pokemonIdentifier}`;
     updatePokemon(searchUrl);
-  }, [location.pathname, updatePokemon]);
+  }, [searchUrl, updatePokemon]);
+  
+  console.log(pokemonType);
+  // if (
+  //   !pokemonDetails.types.find((type) => {
+  //     type.type.name === pokemonType;
+  //   })
+  // ) {
+  //   navigate("/error");
+  // }
 
   if (isLoading) return <Loader />;
   if (error) navigate("/error");

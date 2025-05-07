@@ -40,6 +40,7 @@ export async function getPokemonDetails(url) {
 }
 
 export async function getPokemonList(url) {
+  // Fetch the data from the API
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -48,8 +49,22 @@ export async function getPokemonList(url) {
 
   const data = await res.json();
 
+  // let pokemonInfoList;
+  // let paginationData;
+
+  // if (isByType) {
+  //   pokemonInfoList = data.pokemon.map(async (pokemonData) => {
+  //     const pokemonInfo = await getPokemonDetails(pokemonData.pokemon.url);
+  //     return pokemonInfo;
+  //   });
+  // }
+  // If not by type, fetch the pokemon details from the url
+
   const pokemonInfoList = data.results.map(async (pokemonData) => {
-    const pokemonInfo = await getPokemonDetails(pokemonData.url);
+    const pokemonUrl = pokemonData.url
+      ? pokemonData.url
+      : pokemonData.pokemon.pokemon.url;
+    const pokemonInfo = await getPokemonDetails(pokemonUrl);
     return pokemonInfo;
   });
 
@@ -61,4 +76,17 @@ export async function getPokemonList(url) {
   };
 
   return { pokemonInfoList, paginationData };
+}
+
+export async function getPokemonTypes(url) {
+  console.log(url);
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error("Error to fetch types");
+  }
+  const data = await res.json();
+  const types = data.results.map((type) => {
+    return type.name;
+  });
+  return types;
 }

@@ -9,7 +9,7 @@ export const usePokemonStore = create((set) => ({
   pokemons: [],
   pokemonDetails: {},
   paginationData: {
-    currentUrl: apiUrl,
+    currentUrl: `${apiUrl}pokemon`,
     prevUrl: null,
     nextUrl: null,
     numOfPokemons: 0,

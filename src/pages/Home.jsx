@@ -14,7 +14,7 @@ function Home() {
   const updatePokemons = usePokemonStore((state) => state.updatePokemons);
 
   useEffect(() => {
-    updatePokemons(apiUrl);
+    updatePokemons(`${apiUrl}pokemon`);
   }, [updatePokemons]);
 
   if (isLoading) return <Loader />;

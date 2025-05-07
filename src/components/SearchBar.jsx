@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePokemonStore } from "../store/pokemonStore";
 import { useNavigate } from "react-router";
+import { getPokemonTypes } from "../services/apiPokemon";
 
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -9,11 +10,21 @@ function SearchBar() {
   // Local state
   const [formData, setFormData] = useState({ search: "", type: "" });
   const [validationMessage, setValidationMesage] = useState("");
+  const [types, setTypes] = useState([]);
   // Store state
   const updatePokemons = usePokemonStore((state) => state.updatePokemons);
   const updatePokemon = usePokemonStore((state) => state.updatePokemon);
   // Router
   const navigate = useNavigate();
+
+  async function fetchTypes() {
+    const types = await getPokemonTypes(`${apiUrl}type`);
+    setTypes(types);
+  }
+
+  useEffect(() => {
+    fetchTypes();
+  }, []);
 
   //Handlers functions
   function resetLocalState() {
@@ -23,7 +34,7 @@ function SearchBar() {
 
   function handleResetValues() {
     resetLocalState();
-    updatePokemons(apiUrl);
+    updatePokemons(`${apiUrl}pokemon`);
     updatePokemon(null);
     navigate("/");
   }
@@ -36,9 +47,10 @@ function SearchBar() {
   function handleSubmit(e) {
     e.preventDefault();
     const searchQuery = formData.search;
+    const typeOption = formData.type;
 
     // Validation message when the field is empty
-    if (!searchQuery.trim()) {
+    if (!searchQuery.trim() && !typeOption) {
       setValidationMesage(
         "Please, fill the field with the name or id of the pokemon to continue"
       );
@@ -46,7 +58,7 @@ function SearchBar() {
     }
 
     resetLocalState();
-    navigate(`/pokemon/${searchQuery.toLowerCase()}`);
+    navigate(`/pokemon/${searchQuery.toLowerCase()}/${typeOption}`);
   }
 
   return (
@@ -71,6 +83,23 @@ function SearchBar() {
               {validationMessage && (
                 <p className="help is-danger">{validationMessage}</p>
               )}
+            </div>
+            {/* Select type */}
+            <div className="control">
+              <div className="select">
+                <select
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                >
+                  <option>Select type</option>
+                  {types.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             {/* Submit button */}
             <div className="control">
