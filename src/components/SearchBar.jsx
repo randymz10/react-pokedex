@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { usePokemonStore } from "../store/pokemonStore";
 import { useNavigate } from "react-router";
@@ -57,8 +58,13 @@ function SearchBar() {
       return;
     }
 
+    if (!searchQuery) {
+      navigate(`/type/${typeOption}`);
+    } else {
+      navigate(`/pokemon/${searchQuery.toLowerCase()}`);
+    }
+
     resetLocalState();
-    navigate(`/pokemon/${searchQuery.toLowerCase()}/${typeOption}`);
   }
 
   return (

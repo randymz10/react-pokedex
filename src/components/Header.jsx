@@ -35,7 +35,7 @@ function Header() {
       </div>
       <div className="has-text-centered mt-6 mb-3">
         <h1 className="title is-1 is-uppercase ">
-          <Link to='/'>Pokedéx</Link>
+          <Link className="title is-1" to='/'>Pokedéx</Link>
         </h1>
         <p className="subtitle is-6">
           Your Ultimate Pokémon Guide: Stats, Evolutions, and More!
