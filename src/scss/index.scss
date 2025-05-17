@@ -103,6 +103,18 @@
     // padding-inline-end: 0 !important;
 }
 
+.is-favorite:hover {
+    background-color: #FF6B81;
+}
+
+.is-favorite-active {
+    background-color: #FF6B81;
+}
+
+.is-favorite-active:hover {
+    background-color: #ff4762;
+}
+
 // .dropdown-item {
 //     padding-inline-start: 0 !important;
 //     padding-inline-end: 0 !important;

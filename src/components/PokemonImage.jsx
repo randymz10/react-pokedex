@@ -1,21 +1,35 @@
+//@ts-check
 import React from "react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-function PokemonImage({ imageUrl }) {
-  const [imageLoaded, setImageLoaded] = useState(false);
+/**
+ *
+ * @param {{imageUrl: string, pokemonName: string}} props
+ * @returns
+ */
+function PokemonImage({ imageUrl, pokemonName }) {
+  const [imageLoading, setImageLoading] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const fallbackImage = '/no-camera.png';
 
   function handleOnLoad() {
-    setImageLoaded(true);
+    setImageLoading(true);
+  }
+
+  function handleError() {
+    setImageError(true);
   }
 
   return (
-    <figure className={`image bg-pokeball${imageLoaded ? "" : "is-skeleton"}`}>
+    <figure className={`image bg-pokeball${imageLoading ? "" : "is-skeleton"}`}>
       <img
         className="image-h"
-        src={imageUrl}
+        src={imageError ? fallbackImage: imageUrl}
+        alt={pokemonName}
         loading="lazy"
         onLoad={handleOnLoad}
+        onError={handleError}
       />
     </figure>
   );
@@ -23,6 +37,7 @@ function PokemonImage({ imageUrl }) {
 
 PokemonImage.propTypes = {
   imageUrl: PropTypes.string.isRequired,
+  pokemonName: PropTypes.string.isRequired,
 };
 
 export default PokemonImage;

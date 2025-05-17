@@ -79,7 +79,6 @@ export async function getPokemonList(url) {
 }
 
 export async function getPokemonTypes(url) {
-  console.log(url);
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error("Error to fetch types");

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getTheme } from "../utils/helpers";
+import { getTheme, getFavoritePokemons } from "../utils/helpers";
 import { getPokemonDetails, getPokemonList } from "../services/apiPokemon";
 
 // @ts-ignore
@@ -7,6 +7,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export const usePokemonStore = create((set) => ({
   pokemons: [],
+  favoritePokemons: getFavoritePokemons(),
   pokemonDetails: {},
   paginationData: {
     currentUrl: `${apiUrl}pokemon`,
@@ -20,6 +21,13 @@ export const usePokemonStore = create((set) => ({
   theme: getTheme,
 
   updateTheme: (newTheme) => set({ theme: newTheme }),
+  updateFavoritePokemons: (newFavoritePokemons) => {
+    set({ favoritePokemons: newFavoritePokemons });
+    localStorage.setItem(
+      "favoritePokemons",
+      JSON.stringify(newFavoritePokemons)
+    );
+  },
   updatePokemon: async (url) => {
     set({ isLoading: true });
 

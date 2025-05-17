@@ -7,6 +7,19 @@ export const getTheme = () => {
   return localStorage.getItem("theme");
 };
 
+export const getFavoritePokemons = () => {
+  const favoritePokemons = localStorage.getItem("favoritePokemons");
+  if (favoritePokemons) {
+    return JSON.parse(favoritePokemons);
+  }
+  return [];
+};
+
+export const checkIsFavoritePokemon = (pokemonId) => {
+  const favoritePokemons = getFavoritePokemons();
+  return favoritePokemons.some((pokemon) => pokemon.id === pokemonId);
+};
+
 export function formatPokemonId(id) {
   if (!id) return;
   return `#${id.toString().padStart(3, "0")}`;
