@@ -13,6 +13,7 @@ function Home() {
   const isLoading = usePokemonStore((state) => state.isLoading);
   const error = usePokemonStore((state) => state.error);
   const updatePokemons = usePokemonStore((state) => state.updatePokemons);
+  const pokemonList = usePokemonStore((state) => state.pokemons);
 
   useEffect(() => {
     updatePokemons(`${apiUrl}pokemon`);
@@ -23,7 +24,7 @@ function Home() {
 
   return (
     <main className="container">
-      <PokemonList />
+      <PokemonList pokemonList={pokemonList} />
       <Pagination />
     </main>
   );

@@ -5,6 +5,7 @@ import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import PokemonDetails from "./pages/PokemonDetails";
 import Error from "./pages/Error";
+import Favorites from "./pages/Favorites";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/pokemon/:name" element={<PokemonDetails />} />
+          <Route path="/favorites" element={<Favorites />} />
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>
