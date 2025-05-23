@@ -7,7 +7,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export const usePokemonStore = create((set) => ({
   pokemons: [],
-  favoritePokemons: getFavoritePokemons(),
+  favoritePokemons: getFavoritePokemons() || [],
   pokemonDetails: {},
   paginationData: {
     currentUrl: `${apiUrl}pokemon`,

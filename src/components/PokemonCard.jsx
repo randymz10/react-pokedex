@@ -12,17 +12,20 @@ import PokemonImage from "./PokemonImage";
 import TypeTag from "./TypeTag";
 
 function PokemonCard({ pokemon }) {
+  // Local state
   const [isHovered, setIsHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(
     checkIsFavoritePokemon(pokemon.id)
   );
-
+  // Global state
   const favoritePokemons = usePokemonStore((state) => state.favoritePokemons);
   const updateFavoritePokemons = usePokemonStore(
     (state) => state.updateFavoritePokemons
   );
+
   const navigate = useNavigate();
 
+  // Functions
   function handleClick() {
     navigate(`/pokemon/${pokemon.id}`);
   }
@@ -32,19 +35,21 @@ function PokemonCard({ pokemon }) {
 
     let newFavoritePokemons = [];
 
+    // Check if the pokemon is already in the favorites and mark it as favorite
     if (!isFavorite) {
+      newFavoritePokemons = [...favoritePokemons, pokemon];
+
       localStorage.setItem(
         "favoritePokemons",
-        JSON.stringify(
-          favoritePokemons == null ? [...favoritePokemons, pokemon] : [pokemon]
-        )
+        JSON.stringify(newFavoritePokemons)
       );
-      newFavoritePokemons = [...favoritePokemons, pokemon];
+
       updateFavoritePokemons(newFavoritePokemons);
       setIsFavorite(true);
       return;
     }
 
+    // If the pokemon is already in the favorites, remove it from the favorites
     newFavoritePokemons = favoritePokemons.filter(
       (favoritePokemon) => favoritePokemon.id !== pokemon.id
     );
