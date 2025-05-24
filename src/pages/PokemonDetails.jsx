@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 
@@ -24,14 +25,13 @@ function PokemonDetails() {
   const navigate = useNavigate();
 
   const pokemonIdentifier = location.pathname.split("/")[2];
-  const pokemonType = location.pathname.split("/")[3];
+  // const pokemonType = location.pathname.split("/")[3];
   const searchUrl = `${apiUrl}pokemon/${pokemonIdentifier}`;
 
   useEffect(() => {
     updatePokemon(searchUrl);
   }, [searchUrl, updatePokemon]);
-  
-  console.log(pokemonType);
+
   // if (
   //   !pokemonDetails.types.find((type) => {
   //     type.type.name === pokemonType;
@@ -45,7 +45,13 @@ function PokemonDetails() {
 
   const OPTIONS = {};
   const SLIDES = pokemonDetails.images?.map((imgObj, index) => {
-    return <PokemonImage key={index} imageUrl={imgObj.imageUrl} />;
+    return (
+      <PokemonImage
+        key={index}
+        imageUrl={imgObj.imageUrl}
+        pokemonName={pokemonDetails.name}
+      />
+    );
   });
 
   return (

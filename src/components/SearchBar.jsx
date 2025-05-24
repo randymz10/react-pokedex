@@ -57,9 +57,9 @@ function SearchBar() {
       );
       return;
     }
-
+    
     if (!searchQuery) {
-      navigate(`/type/${typeOption}`);
+      updatePokemons(`${apiUrl}type/${typeOption}`);
     } else {
       navigate(`/pokemon/${searchQuery.toLowerCase()}`);
     }
