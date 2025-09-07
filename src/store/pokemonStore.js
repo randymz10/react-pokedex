@@ -5,14 +5,14 @@ import { getPokemonDetails, getPokemonList } from "../services/apiPokemon";
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const usePokemonStore = create((set) => ({
+export const usePokemonStore = create((set, get) => ({
   pokemons: [],
   favoritePokemons: getFavoritePokemons() || [],
   pokemonDetails: {},
   paginationData: {
-    currentUrl: `${apiUrl}pokemon`,
-    prevUrl: null,
-    nextUrl: null,
+    current: `${apiUrl}pokemon`,
+    prev: null,
+    next: null,
     numOfPokemons: 0,
     currentPage: 1,
   },
@@ -48,21 +48,42 @@ export const usePokemonStore = create((set) => ({
       set({ isLoading: false });
     }
   },
-  updatePokemons: async (url, page = 1) => {
+  updatePokemons: async (currentPosition, page = 1) => {
     try {
       set({ isLoading: true });
-      const { pokemonInfoList, paginationData } = await getPokemonList(url);
+      const pokemonList = get().pokemons;
+      if (typeof currentPosition === "number") {
+        set((prevState) => ({
+          paginationData: {
+            ...prevState.paginationData,
+            current: currentPosition,
+            prev: currentPosition === 0 ? 0 : currentPosition - 20,
+            next:
+              currentPosition === pokemonList.length
+                ? pokemonList.length
+                : currentPosition + 20,
+            numOfPokemons: pokemonList.length,
+            currentPage: page ? page : 1,
+          },
+        }));
+        return;
+      }
+
+      const { pokemonInfoList, paginationData } = await getPokemonList(
+        currentPosition
+      );
       set({ pokemons: await Promise.all(pokemonInfoList) });
       set((prevState) => ({
         paginationData: {
           ...prevState.paginationData,
-          currentUrl: url,
-          prevUrl: paginationData.prevUrl ? paginationData.prevUrl : null,
-          nextUrl: paginationData.nextUrl ? paginationData.nextUrl : null,
+          current: currentPosition,
+          prev: paginationData.prev ? paginationData.prev : null,
+          next: paginationData.next ? paginationData.next : null,
           numOfPokemons: paginationData.numOfPokemons,
           currentPage: page ? page : 1,
         },
       }));
+
       set({ error: null });
     } catch (error) {
       set({ error: error });

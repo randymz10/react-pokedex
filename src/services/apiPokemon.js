@@ -49,28 +49,35 @@ export async function getPokemonList(url) {
 
   const data = await res.json();
   let pokemonInfoList;
-  // let paginationData;
+  let paginationData;
 
   if (!data.results) {
-    console.log(data.pokemon);
     pokemonInfoList = data.pokemon.map(async (pokemonData) => {
       const pokemonInfo = await getPokemonDetails(pokemonData.pokemon.url);
       return pokemonInfo;
     });
-  } else {
-    pokemonInfoList = data.results.map(async (pokemonData) => {
-      const pokemonUrl = pokemonData.url
-        ? pokemonData.url
-        : pokemonData.pokemon.pokemon.url;
-      const pokemonInfo = await getPokemonDetails(pokemonUrl);
-      return pokemonInfo;
-    });
-  }
 
-  const paginationData = {
-    currentUrl: url,
-    prevUrl: data.previous ? data.previous : null,
-    nextUrl: data.next ? data.next : null,
+    paginationData = {
+      current: url,
+      prev: 0,
+      next: 20,
+      numOfPokemons: data.pokemon.length,
+    };
+    return { pokemonInfoList, paginationData };
+  }
+  
+  pokemonInfoList = data.results.map(async (pokemonData) => {
+    const pokemonUrl = pokemonData.url
+      ? pokemonData.url
+      : pokemonData.pokemon.pokemon.url;
+    const pokemonInfo = await getPokemonDetails(pokemonUrl);
+    return pokemonInfo;
+  });
+
+  paginationData = {
+    current: url,
+    prev: data.previous ? data.previous : null,
+    next: data.next ? data.next : null,
     numOfPokemons: data.count,
   };
 

@@ -8,7 +8,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 function Pagination() {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
-  const { numOfPokemons, currentPage, prevUrl, nextUrl } = usePokemonStore(
+  const { numOfPokemons, currentPage, prev, next } = usePokemonStore(
     (state) => state.paginationData
   );
   const updatePokemons = usePokemonStore((state) => state.updatePokemons);
@@ -21,12 +21,12 @@ function Pagination() {
 
   function handlePrev() {
     const page = currentPage - 1;
-    updatePokemons(prevUrl, page);
+    updatePokemons(prev, page);
   }
 
   function handleNext() {
     const page = currentPage + 1;
-    updatePokemons(nextUrl, page);
+    updatePokemons(next, page);
   }
 
   function handlePage(page) {
@@ -43,16 +43,16 @@ function Pagination() {
           aria-label="pagination"
         >
           <button
-            className={`pagination-previous ${!prevUrl ? "is-disabled" : ""}`}
+            className={`pagination-previous ${!prev ? "is-disabled" : ""}`}
             onClick={handlePrev}
-            disabled={!prevUrl}
+            disabled={!prev}
           >
             Prev
           </button>
           <button
-            className={`pagination-next ${!nextUrl ? "is-disabled" : ""}`}
+            className={`pagination-next ${!next ? "is-disabled" : ""}`}
             onClick={handleNext}
-            disabled={!nextUrl}
+            disabled={!next}
           >
             Next
           </button>
@@ -69,7 +69,7 @@ function Pagination() {
                   aria-controls="dropdown-menu"
                   onClick={handleDropdown}
                 >
-                  <span>Select Page</span>
+                  <span>{currentPage === 1 ? "Select Page" : currentPage}</span>
                   <span className="icon is-small">
                     <FaAngleUp />
                   </span>
